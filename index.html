@@ -29,44 +29,16 @@
     <main>
         <div class="container main-container">
             <div class="row">
-                <div class="col-4 hidden">
-                    <div class="container">
-                        <!-- title of the position -->
-                        <div class="row">
-                            <div id="job_pos" class="col"><h2><i>Name of the position</i></h2></div>
-                        </div>
-
-                        <!-- location + date-->
-                        <div class="row my-1">
-                            <div class="col-12 col-md-4">Location:</div>
-                            <div id="job_loc" class="col-12 col-md-8"><i>City/Country</i></div>
-                        </div>
-
-                        <div class="row my-1">
-                            <div class="col-12 col-md-4">Created on:</div>
-                            <div id="job_date" class="col-12 col-md-8"><i>data</i></div>
-                        </div>
-
-                        <!-- company -->
-                        <div class="row my-1">
-                            <div class="col-12 col-md-4">Company:</div>
-                            <div id="job_comp" class="col-12 col-md-8"><i>name</i></div>
-                        </div>
-
-                        <!-- description -->
-                        <div class="row my-1">
-                            <div id="job_desc" class="col"><i>description</i></div>
-                        </div>
-
-                        <!-- apply -->
-                        <div class="row my-1">
-                            <div id="job_app" class="col"><i>apply</i></div>
-                        </div>
-                    </div>
+                <div class="col-4">
+                    <input id="input" class="" type="text" id="gh-desc" value="javascript" />
+                    <button id="go" class="btn btn-danger" type="submit">GO!</button>
                 </div>
                 <div class="col-8">
                     <div id="map"></div>
                 </div>
+            </div>
+            <div class="row">
+                <div id="joblist" class="col"></div>
             </div>
         </div>
 
@@ -83,8 +55,42 @@
 
     <script type="text/javascript">
         //temporary script -- will be later extracted to seperate file
-        var url = "https://jobs.github.com/positions?"
 
+        //API
+        const appID = '0bbe3156';
+        const appKey = '3c663976945b145820dd4a4acd49ef3c';
+        var url = `http://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=${appID}&app_key=${appKey}&results_per_page=10`;
+
+        function getData(cb, search) {
+            var xhr = new XMLHttpRequest();
+
+            xhr.open("GET", url + search);
+            xhr.setRequestHeader('Accept', 'application/json');
+            xhr.send();
+
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    cb(JSON.parse(this.responseText));
+                }
+            };
+        }
+
+        function printResponse() {
+            var query = encodeURI($('#input').val());
+            console.log(`input: ${query}`);
+            getData(console.log, `&what=${query}`);
+        }
+
+        // getData(console.log);
+        $('#input').keydown(function (event) {
+            if (event.keyCode == 13) {
+                printResponse();
+            }
+        });
+
+        $('#go').click(function (event) {
+            printResponse();
+        });
     </script>
 
     <!-- Bing Maps -->
