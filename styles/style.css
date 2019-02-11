@@ -4,6 +4,15 @@ body {
   font-size: 14px;
 }
 
+.searchbox #input {
+  width: 50%;
+  font-size: 2rem;
+}
+.searchbox #go {
+  width: 50%;
+  font-size: 2rem;
+}
+
 #map {
   position: relative;
   width: 100%;
@@ -20,6 +29,28 @@ body {
 
 footer {
   padding: 2em;
+}
+
+.job-list {
+  margin: 10px 0;
+  font-size: 16px;
+}
+.job-list .job-title {
+  font-size: 1.5em;
+  border-bottom: 1px solid #555;
+  text-align: center;
+}
+.job-list .details-container {
+  padding: 1px;
+  border-bottom: 1px solid #555;
+  text-align: center;
+}
+.job-list .details-container .details {
+  margin: 0 3px;
+}
+.job-list .job-description {
+  text-align: justify;
+  padding: 5px;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" type="text/css" href="styles/bootstrap.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="styles/style.css" />
 
 </head>
@@ -17,29 +18,116 @@
     <header>
         <nav class="navbar navbar-dark bg-dark">
             <a class="navbar-brand" href="#">Developer Jobsearch</a>
-            <div class="float-right">
+            <!-- <div class="float-right">
                 <form class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
                 </form>
-            </div>
+            </div> -->
         </nav>
     </header>
 
     <main>
         <div class="container main-container">
             <div class="row">
-                <div class="col-4">
-                    <input id="input" class="" type="text" id="gh-desc" value="javascript" />
-                    <button id="go" class="btn btn-danger" type="submit">GO!</button>
+                <div class="col">
+                    <div class="searchbox text-center ">
+                        <div class="p-1">
+                            <input id="input" class="shadow p-2 bg-white rounded" type="search" value="javascript" />
+                        </div>
+                        <div class="p-1">
+                            <button id="go" class="btn btn-primary p-2 shadow" type="submit">GO!</button>
+                        </div>
+
+                    </div>
                 </div>
-                <div class="col-8">
+            </div>
+            <div class="row">
+                <div class="col">
                     <div id="map"></div>
                 </div>
             </div>
             <div class="row">
-                <div id="joblist" class="col"></div>
+                <div class="container job-list">
+                    <div class="row ">
+                        <div class="col-4 job-box ">
+                            <h2 class="job-title">Javascript Developer</h2>
+                            <div class="details-container">
+
+                                <span class="job-company details"> <i class="fas fa-building"></i> hackajob Client</span>
+                                <span class="job-location details"> <i class="fas fa-map-marked-alt"></i> London, UK</span>
+                                <span class="job-date details"> <i class="far fa-calendar-alt"></i> 6d</span>
+
+                            </div>
+                            <p class="job-description">Preferred Skills: Java, React, Agile, AWS, TDD, BDD, Microservices, Google Cloud Platform, Microsoft Azure, Cloud Foundry, Continuous Integration, Continuous Deployment, Docker ...</p>
+                            <button class="btn btn-success float-right" type="submit">Apply</button>
+                        </div>
+                        <div class="col-4 job-box ">
+                            <h2 class="job-title">Javascript Developer</h2>
+                            <div class="details-container">
+
+                                <span class="job-company details"> <i class="fas fa-building"></i> hackajob Client</span>
+                                <span class="job-location details"> <i class="fas fa-map-marked-alt"></i> London, UK</span>
+                                <span class="job-date details "> <i class="far fa-calendar-alt"></i> 6d</span>
+
+                            </div>
+                            <p class="job-description">Preferred Skills: Java, React, Agile, AWS, TDD, BDD, Microservices, Google Cloud Platform, Microsoft Azure, Cloud Foundry, Continuous Integration, Continuous Deployment, Docker ...</p>
+                            <button class="btn btn-success float-right" type="submit">Apply</button>
+                        </div>
+                        <div class="col-4 job-box ">
+                            <h2 class="job-title">Javascript Developer</h2>
+                            <div class="details-container">
+
+                                <span class="job-company details"> <i class="fas fa-building"></i> hackajob Client</span>
+                                <span class="job-location details"> <i class="fas fa-map-marked-alt"></i> London, UK</span>
+                                <span class="job-date details"> <i class="far fa-calendar-alt"></i> 6d</span>
+
+                            </div>
+                            <p class="job-description">Preferred Skills: Java, React, Agile, AWS, TDD, BDD, Microservices, Google Cloud Platform, Microsoft Azure, Cloud Foundry, Continuous Integration, Continuous Deployment, Docker ...</p>
+                            <button class="btn btn-success float-right" type="submit">Apply</button>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-4 job-box ">
+                            <h2 class="job-title">Javascript Developer</h2>
+                            <div class="details-container">
+
+                                <span class="job-company details"> <i class="fas fa-building"></i> hackajob Client</span>
+                                <span class="job-location details"> <i class="fas fa-map-marked-alt"></i> London, UK</span>
+                                <span class="job-date details"> <i class="far fa-calendar-alt"></i> 6d</span>
+
+                            </div>
+                            <p class="job-description">Preferred Skills: Java, React, Agile, AWS, TDD, BDD, Microservices, Google Cloud Platform, Microsoft Azure, Cloud Foundry, Continuous Integration, Continuous Deployment, Docker ...</p>
+                            <button class="btn btn-success float-right" type="submit">Apply</button>
+                        </div>
+                        <div class="col-4 job-box ">
+                            <h2 class="job-title">Javascript Developer</h2>
+                            <div class="details-container">
+
+                                <span class="job-company details"> <i class="fas fa-building"></i> hackajob Client</span>
+                                <span class="job-location details"> <i class="fas fa-map-marked-alt"></i> London, UK</span>
+                                <span class="job-date details"> <i class="far fa-calendar-alt"></i> 6d</span>
+
+                            </div>
+                            <p class="job-description">Preferred Skills: Java, React, Agile, AWS, TDD, BDD, Microservices, Google Cloud Platform, Microsoft Azure, Cloud Foundry, Continuous Integration, Continuous Deployment, Docker ...</p>
+                            <button class="btn btn-success float-right" type="submit">Apply</button>
+                        </div>
+                        <div class="col-4 job-box ">
+                            <h2 class="job-title">Javascript Developer</h2>
+                            <div class="details-container">
+
+                                <span class="job-company details"> <i class="fas fa-building"></i> hackajob Client</span>
+                                <span class="job-location details"> <i class="fas fa-map-marked-alt"></i> London, UK</span>
+                                <span class="job-date details"> <i class="far fa-calendar-alt"></i> 6d</span>
+
+                            </div>
+                            <p class="job-description">Preferred Skills: Java, React, Agile, AWS, TDD, BDD, Microservices, Google Cloud Platform, Microsoft Azure, Cloud Foundry, Continuous Integration, Continuous Deployment, Docker ...</p>
+                            <button class="btn btn-success float-right" type="submit">Apply</button>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </div>
 
     </main>
@@ -53,79 +141,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-    <script type="text/javascript">
-        //temporary script -- will be later extracted to seperate file
-
-        //API
-        const appID = '0bbe3156';
-        const appKey = '3c663976945b145820dd4a4acd49ef3c';
-        var url = `http://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=${appID}&app_key=${appKey}&results_per_page=10`;
-
-        function getData(cb, search) {
-            var xhr = new XMLHttpRequest();
-
-            xhr.open("GET", url + search);
-            xhr.setRequestHeader('Accept', 'application/json');
-            xhr.send();
-
-            xhr.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    cb(JSON.parse(this.responseText));
-                }
-            };
-        }
-
-        function printResponse() {
-            var query = encodeURI($('#input').val());
-            console.log(`input: ${query}`);
-            getData(console.log, `&what=${query}`);
-        }
-
-        // getData(console.log);
-        $('#input').keydown(function (event) {
-            if (event.keyCode == 13) {
-                printResponse();
-            }
-        });
-
-        $('#go').click(function (event) {
-            printResponse();
-        });
-    </script>
-
     <!-- Bing Maps -->
-    <!-- <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=Ardk901xHTnQMsqQm8sYUmbI9R6MC2U1crUKj2S4w9GnC2j_UiCkbZqSpuHPUlTb' async defer></script>
-
-    <script type='text/javascript'>
-        var jobsQuantity = 16;
-        var jobsLocation = 'London'
-
-        function GetMap() {
-            var map = new Microsoft.Maps.Map('#map', {
-                credentials: 'Ardk901xHTnQMsqQm8sYUmbI9R6MC2U1crUKj2S4w9GnC2j_UiCkbZqSpuHPUlTb',
-                //center: new Microsoft.Maps.Location(50.50632, -10.12714),
-                mapTypeId: Microsoft.Maps.MapTypeId.grayscale,
-                disableBirdseye: true,
-                disableStreetside: true,
-                showMapTypeSelector: false,
-                zoom: 6,
-                minZoom: 2,
-                maxZoom: 8
-            });
-
-            var jobsMark = new Microsoft.Maps.Location(51.50632, -0.12714);
-
-            var pin = new Microsoft.Maps.Pushpin(jobsMark, {
-                title: jobsLocation,
-                subTitle: '',
-                text: jobsQuantity.toString()
-            });
-
-            map.entities.push(pin);
-
-            // console.log(map);
-        };
-    </script> -->
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=Ardk901xHTnQMsqQm8sYUmbI9R6MC2U1crUKj2S4w9GnC2j_UiCkbZqSpuHPUlTb' async defer></script>
 
     <!-- My scripts: -->
     <script type='text/javascript' src="scripts/main.js"></script>
