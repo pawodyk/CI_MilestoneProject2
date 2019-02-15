@@ -8,16 +8,18 @@ body {
 }
 
 .searchbox {
-    
+    vertical-align:middle;
+    width: 60%;
 
+    
     #input {
 
-        width: 50%;
+        
         font-size: 2rem;
     }
 
     #go {
-        width: 50%;
+        
         font-size: 2rem;
     }
 }
@@ -28,8 +30,9 @@ body {
     width: 100%;
     max-width: 600px;
     height: 400px;
-    background-color: black; //temporary variable to show where the map is
+    background-color: black; //temporary variable to show where the map is for development purposes
     margin: 0 auto;
+    display:none;
 }
 
 .main-container {
