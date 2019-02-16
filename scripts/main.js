@@ -87,7 +87,7 @@ function writeToHTML() {
     for (let index = from; index < to; index++) {
         const element = response[index];
         var daysOld = Math.floor((new Date() - new Date(element.created)) / (1000 * 60 * 60 * 24));
-        var decription = element.description;
+        var decription = element.description.replace(/\<strong\>/g, "").replace(/\<\/strong\>/g, "");
         description = decription.length > 400 ? decription.substring(0, 400) + "..." : decription;
 
         html += `<div class="col-6 col-md-4 p-1 shadow">
