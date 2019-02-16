@@ -8,18 +8,19 @@ body {
 }
 
 .searchbox {
-    vertical-align:middle;
+    vertical-align: middle;
     width: 60%;
+    margin: 0 auto;
 
-    
+
     #input {
 
-        
+
         font-size: 2rem;
     }
 
     #go {
-        
+
         font-size: 2rem;
     }
 }
@@ -30,9 +31,9 @@ body {
     width: 100%;
     max-width: 600px;
     height: 400px;
-    background-color: black; //temporary variable to show where the map is for development purposes
     margin: 0 auto;
-    display:none;
+    background-color: black; //temporary variable to show where the map is for development purposes
+    display: none;
 }
 
 .main-container {
@@ -40,13 +41,25 @@ body {
     background-color: lightgray;
 }
 
-footer {
-    padding: 2em;
+main {
+    height: 100%;
+    min-height: 100%;
 }
 
-.job-list {
-    margin: 10px 0;
-    font-size: 16px;
+footer {
+    padding: 2em;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    margin-top: auto;
+    height: 100px;
+}
+
+.job-box {
+    min-height: 250px;
+    max-height: 250px;
+
 
     .job-title {
         font-size: 1.5em;
@@ -58,14 +71,23 @@ footer {
         padding: 1px;
         border-bottom: 1px solid #555;
         text-align: center;
+        margin-bottom: 5px;
+        text-align: center;
 
         .details {
-            margin: 0 3px;
+            margin: 3px;
+            vertical-align: middle;
         }
     }
 
     .job-description {
         text-align: justify;
         padding: 5px;
+        overflow-y: auto;
     }
+}
+
+.btn_apply {
+    width: 100%;
+    text-align: center;
 }

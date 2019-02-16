@@ -3,11 +3,14 @@
 const appID = '0bbe3156';
 const appKey = '3c663976945b145820dd4a4acd49ef3c';
 var page = 1;
-var results = 3;
+var results = 30;
 var daysOld = 10;
-var url = `http://api.adzuna.com/v1/api/jobs/gb/search/${page}?app_id=${appID}&app_key=${appKey}&results_per_page=${results}&max_days_old=${daysOld}&category=it-Jobs`;
+
+var response = [];
 
 function getData(search, cb) {
+    var url = `http://api.adzuna.com/v1/api/jobs/gb/search/${page}?app_id=${appID}&app_key=${appKey}&results_per_page=${results}&max_days_old=${daysOld}&category=it-jobs&sort_by=date`;
+
     var xhr = new XMLHttpRequest();
 
     xhr.open("GET", url + search);
@@ -21,75 +24,90 @@ function getData(search, cb) {
     };
 }
 
-function printResponse() {
-    var query = encodeURI($('#input').val());
-    console.log(`input: ${query}`);
-    getData(`&what=${query}`, console.log);
-}
+var from = 0;
+var to = 6;
 
-// getData(console.log);
-$('#input').keydown(function (event) {
+//input functions
+$('#input_position').keydown(function (event) {
     if (event.keyCode == 13) {
-        writeToHTML();
+        $('#job-list').html("");
+        acquireResponse();
     }
 });
 
 $('#go').click(function (event) {
-    // writeToHTML();
-    writeToHTML();
+
+    $('#job-list').html("");
+    from = 0;
+    to = 6;
+    acquireResponse();
 });
 
-function writeToHTML() {
-    var query = encodeURI($('#input').val());
-    console.log(`input: ${query}`);
-    getData(`&what=${query}`, function (data){
-        data = data.results;
-        console.log(data);
-        var html = "";
-        html = '<div class="row ">';
-        data.forEach(function(single){
-            var daysOld = Math.floor((new Date() - new Date(single.created))/(1000*60*60*24));
-            html += `<div class="col-4 job-box">
-                    <h2 class="job-title">${single.title}</h2>
-                    <div class="details-container">
-                    <span class="job-company details"><i class="fas fa-building"></i> ${single.company.display_name}</span>
-                    <span class="job-location details"><i class="fas fa-map-marked-alt"></i> ${single.location.display_name}</span>
-                    <span class="job-date details"><i class="far fa-calendar-alt"></i> ${daysOld} d</span>
-                    </div>
-                    <p class="job-description">${single.description}</p>
-                            <a class="btn btn-success float-right" href="${single.redirect_url}" target="_blank">Apply</a>
-                        </div>`;
-        });
-        html += '</div>';
+function displayMore() {
+    console.log("click");
+    $("#btn_more").remove();
+    //from += 6;
+    if (response.length > to + 6) {
+        to += 6;
+    } else {
+        to = response.length;
+        $(this).remove();
+    }
+    writeToHTML();
+}
 
-        
-        $('.job-list').append(html);
+
+// $('#btn_more').click(function (event){
+//     
+// });
+
+
+function acquireResponse() {
+    var query = encodeURI($('#input_position').val());
+    console.log(`input: ${query}`);
+    getData(`&what=${query}`, function (data) {
+        response = data.results;
+        console.log(response);
+
+        writeToHTML();
+
     });
 }
 
-
-//CODE IN DEVELOPMENT:
-
-var testObj = [];
-
-function writeToTestObject() {
-    getData(function (data) {
-            testObj = data.results;
-        },
-        "&what=" + encodeURI($('#input').val())
-    );
+function printResponse() {
+    console.log(acquireResponse());
 }
 
-function test() {
-    // testObj.forEach(function (line){});
-    var temp = testObj[0];
 
-    for (const key in temp) {
-        $('#job-list').append(`<p>${key}: ${temp[key]}</p>`);
+function writeToHTML() {
+
+    var html = "";
+    html = '<div class="row ">';
+
+    for (let index = from; index < to; index++) {
+        const element = response[index];
+        var daysOld = Math.floor((new Date() - new Date(element.created)) / (1000 * 60 * 60 * 24));
+        var decription = element.description;
+        description = decription.length > 400 ? decription.substring(0, 400) + "..." : decription;
+
+        html += `<div class="col-6 col-md-4 p-1 shadow">
+                <div class="job-box">
+                    <h2 class="job-title">${element.title}</h2>
+                    <div class="details-container">
+                        <span class="job-company details"><i class="fas fa-building"></i> ${element.company.display_name}</span>
+                        <span class="job-location details"><i class="fas fa-map-marked-alt"></i> ${element.location.display_name}</span>
+                        <span class="job-date details"><i class="far fa-calendar-alt"></i> ${daysOld} d</span>
+                    </div>
+                    <p class="job-description">${description}</p>
+                </div>
+                <a class="btn btn-success text-center btn_apply p-2" href="${element.redirect_url}" target="_blank">Apply</a>
+                </div>`;
     }
+    html += `</div> 
+            <button id="btn_more" class="btn btn-primary p-2 shadow float-right" type="submit" onclick="displayMore()">MORE!</button>`;
 
+    $('#job-list').html(html);
 }
-
 
 //BING Maps temporary code:
 
