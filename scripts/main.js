@@ -9,7 +9,7 @@ var daysOld = 10;
 var response = [];
 
 function getData(search, cb) {
-    var url = `http://api.adzuna.com/v1/api/jobs/gb/search/${page}?app_id=${appID}&app_key=${appKey}&results_per_page=${results}&max_days_old=${daysOld}&category=it-jobs&sort_by=date`;
+    var url = `https://api.adzuna.com/v1/api/jobs/gb/search/${page}?app_id=${appID}&app_key=${appKey}&results_per_page=${results}&max_days_old=${daysOld}&category=it-jobs&sort_by=date`;
 
     var xhr = new XMLHttpRequest();
 
