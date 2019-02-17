@@ -33,7 +33,7 @@ body {
     height: 400px;
     margin: 0 auto;
     background-color: black; //temporary variable to show where the map is for development purposes
-    display: none;
+    //display: none;
 }
 
 .main-container {
@@ -57,9 +57,9 @@ footer {
 }
 
 .job-box {
-    min-height: 250px;
-    max-height: 250px;
-
+    min-height: 260px;
+    max-height: 260px;
+    //overflow: hidden;
 
     .job-title {
         font-size: 1.5em;
@@ -71,8 +71,7 @@ footer {
         padding: 1px;
         border-bottom: 1px solid #555;
         text-align: center;
-        margin-bottom: 5px;
-        text-align: center;
+        max-height: 200px;
 
         .details {
             margin: 3px;
@@ -83,11 +82,13 @@ footer {
     .job-description {
         text-align: justify;
         padding: 5px;
-        overflow-y: auto;
+        overflow-y: hidden;
+        max-height: 150px;
     }
 }
 
 .btn_apply {
     width: 100%;
     text-align: center;
+    margin: 10px 0 5px;
 }
