@@ -36,7 +36,7 @@ body {
     //display: none;
 }
 
-.main-container {
+.main_container {
     padding: 10px;
     background-color: lightgray;
 }
@@ -56,33 +56,37 @@ footer {
     height: 100px;
 }
 
-.job-box {
+.job_box {
     min-height: 260px;
     max-height: 260px;
-    //overflow: hidden;
+    overflow: hidden;
 
-    .job-title {
+    .job_title {
         font-size: 1.5em;
         border-bottom: 1px solid #555;
         text-align: center;
     }
 
-    .details-container {
+    .details_container {
         padding: 1px;
         border-bottom: 1px solid #555;
-        text-align: center;
+        text-align: left;
         max-height: 200px;
+        
+        
 
         .details {
             margin: 3px;
-            vertical-align: middle;
+            // vertical-align: left;
+            overflow-x: hidden;
+
         }
     }
 
-    .job-description {
+    .job_description {
         text-align: justify;
         padding: 5px;
-        overflow-y: hidden;
+        overflow-y: auto;
         max-height: 150px;
     }
 }

@@ -10,3 +10,4 @@
 ### Images
 
 * [Loading Gif](https://www.sitepoint.com/demos/loading-images/?size=big)
+* [Photo by rawpixel on Unsplash](https://unsplash.com/photos/cnseVhmbA7k)
