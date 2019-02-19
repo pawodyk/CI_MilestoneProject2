@@ -1,7 +1,9 @@
 // global variables:
 
-var jobQuery;
-var placeQuery;
+const localisation = "gb";
+
+var jobQuery = "";
+var placeQuery = "";
 
 var from = 0;
 var to = 6;
@@ -9,21 +11,23 @@ var response = [];
 
 //API variables
 var page = 1;
-var results = 48; // => 48
+var results = 12; // => 48
 var daysOld = 10;
 var map;
 
 
 //input functions
-$('#input_position').keydown(function (event) {
+$('.input').keydown(function (event) {
     if (event.keyCode == 13) {
-        query = encodeURI($('#input_position').val());
+        jobQuery = $('#input_job').val();
+        placeQuery = $('#input_place').val();
         acquireResponse(1);
     }
 });
 
 $('#go').click(function (event) {
-    query = encodeURI($('#input_position').val());
+    jobQuery = $('#input_job').val();
+    placeQuery = $('#input_place').val();
     acquireResponse(1);
 });
 
@@ -31,17 +35,26 @@ $('#go').click(function (event) {
 // general functions
 function acquireResponse(requestedPage) {
 
-    console.log(`input: ${query}`);
+    console.log(`input: ${jobQuery}`);
     $('#job_list').html("");
+    //map.entities.clear(); //this work only with pins and do not work with clusters
+    map.layers.clear();
     page = requestedPage;
     from = 0;
     to = 6;
 
-    getData(`&what=${query}`, function (data) {
-        response = data.results;
-        console.log(response);
-        writeToHTML();
-        addPushpins();
+    $("#job_list").append('<img class="mx-auto d-block" src="img/ajax-loading.gif" alt="loading..." width="100">');
+
+    getData(jobQuery, placeQuery, function (data) {
+        if (data.length > 0) {
+            response = data.results;
+            console.log(response);
+            writeToHTML();
+            addPushpins();
+        } else {
+            $('#job_list').html('<p style="text-align: center; font-size: 3em;">no results found...</p>');
+        }
+
     });
 }
 
@@ -61,23 +74,17 @@ function displayMore() {
     }
 }
 
-//var oldResults = "";
-
 function requestMore() {
     $("#btn_more").remove();
     $("#job_list").html("");
-    //map.entities.clear(); //this work only with pins and do not work with clusters
-    map.layers.clear();
+
     page++;
 
-    getData(`&what=${query}`, function (data) {
-        acquireResponse(page);
-        console.log("received next " + results + " jobs from server");
-    });
-
+    acquireResponse(page);
+    console.log("requested next " + results + " jobs from server");
 }
 
-
+// Write the results to html
 function writeToHTML() {
     console.log("writing to HTML... page: " + page + "; results:" + from + "-->" + to);
     var html = '<div class="row ">';
@@ -99,7 +106,7 @@ function writeToHTML() {
                         </div>
                         <div class="float-right">
                             <div class="details"><i class="fas fa-money-bill-alt" style="color:green;"></i>&nbsp;${salary}</div>
-                            <div class="job_date details"><i class="far fa-calendar-alt" style="color:yellow;"></i>&nbsp;${time}</div>
+                            <div class="job_date details"><i class="fas fa-business-time" style="color:orange;"></i>&nbsp;${time}</div>
 
                         </div>
                         
@@ -114,6 +121,8 @@ function writeToHTML() {
 
     $('#job_list').html(html);
 }
+
+// WriteToHTML() helper classes
 
 function shorten(word, maxLength) {
     var shortened;
@@ -144,22 +153,27 @@ function calculateTime(time) {
     return result;
 }
 
-//API s
+
+
+// ================== API s ===========================
 
 //Call to Adzuna API
-function getData(search, cb) {
+function getData(job, place, cb) {
 
     const appID = '0bbe3156';
     const appKey = '3c663976945b145820dd4a4acd49ef3c';
+    const category = 'it-jobs';
 
-    var url = `https://api.adzuna.com/v1/api/jobs/gb/search/${page}?app_id=${appID}&app_key=${appKey}&results_per_page=${results}&max_days_old=${daysOld}&category=it-jobs&sort_by=date`;
+    job = encodeURI(job);
+    place = encodeURI(place);
+
+    var url = `https://api.adzuna.com/v1/api/jobs/${localisation}/search/${page}?app_id=${appID}&app_key=${appKey}&results_per_page=${results}&distance=30&max_days_old=${daysOld}&category=${category}&sort_by=date&what=${job}&where=${place}`;
 
     var xhr = new XMLHttpRequest();
 
-    xhr.open("GET", url + search);
+    xhr.open("GET", url);
     xhr.setRequestHeader('Accept', 'application/json');
     xhr.send();
-    $("#job_list").append('<img class="mx-auto d-block" src="img/ajax-loading.gif" alt="loading..." width="100">');
 
     xhr.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -215,8 +229,8 @@ function addPushpins() {
 
     Microsoft.Maps.loadModule('Microsoft.Maps.Clustering', function () {
         var clusterLayer = new Microsoft.Maps.ClusterLayer(pins, {
-            clusteredPinCallback: createCustomClusteredPin, 
-            gridSize: 80 
+            clusteredPinCallback: createCustomClusteredPin,
+            gridSize: 80
         });
         map.layers.insert(clusterLayer);
     });
@@ -224,7 +238,7 @@ function addPushpins() {
 }
 
 
-
+// this code was taken from Microsoft Documents Customizing Clustered Pushpins Example:
 function createCustomClusteredPin(cluster) {
     //Define variables for minimum cluster radius, and how wide the outline area of the circle should be.
     var minRadius = 12;
