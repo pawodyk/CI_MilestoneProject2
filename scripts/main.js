@@ -11,7 +11,7 @@ var response = [];
 
 //API variables
 var page = 1;
-var results = 12; // => 48
+var results = 48; // => 48
 var daysOld = 10;
 var map;
 
@@ -46,8 +46,8 @@ function acquireResponse(requestedPage) {
     $("#job_list").append('<img class="mx-auto d-block" src="img/ajax-loading.gif" alt="loading..." width="100">');
 
     getData(jobQuery, placeQuery, function (data) {
-        if (data.length > 0) {
-            response = data.results;
+        response = data.results;
+        if (response.length > 0) {
             console.log(response);
             writeToHTML();
             addPushpins();
@@ -215,11 +215,12 @@ function addPushpins() {
         } else {
             let location = new Microsoft.Maps.Location(element.latitude, element.longitude);
             let pin = new Microsoft.Maps.Pushpin(location, {
-                title: element.title.replace(/\<strong\>/g, "").replace(/\<\/strong\>/g, ""),
-                //subTitle: '',
+                title: element.location.area[element.location.area.length - 1],
+                subTitle: element.title.replace(/\<strong\>/g, "").replace(/\<\/strong\>/g, ""),
                 text: 1,
                 color: "rgba(65, 168, 213, 0.5)"
             });
+            //pin.id = element.id;
 
             // map.entities.push(pin);
             pins.push(pin);
@@ -227,11 +228,21 @@ function addPushpins() {
 
     });
 
+    console.log(pins);
+
     Microsoft.Maps.loadModule('Microsoft.Maps.Clustering', function () {
         var clusterLayer = new Microsoft.Maps.ClusterLayer(pins, {
             clusteredPinCallback: createCustomClusteredPin,
             gridSize: 80
         });
+
+
+        Microsoft.Maps.Events.addHandler(clusterLayer, 'click', function (e){
+           console.log(e);
+        });
+
+        //Microsoft.Maps.Events.addHandler(clusterLayer, 'mouseover', clusterGenerated);
+
         map.layers.insert(clusterLayer);
     });
 
@@ -268,4 +279,44 @@ function createCustomClusteredPin(cluster) {
         anchor: new Microsoft.Maps.Point(radius, radius),
         textOffset: new Microsoft.Maps.Point(0, radius - 8) //Subtract 8 to compensate for height of text.
     });
+}
+
+function focusOnCluster() {
+    if (e.target.containedPushpins) {
+        var locs = [];
+        for (var i = 0, len = e.target.containedPushpins.length; i < len; i++) {
+            //Get the location of each pushpin.
+            locs.push(e.target.containedPushpins[i].getLocation());
+        }
+
+        //Create a bounding box for the pushpins.
+        var bounds = Microsoft.Maps.LocationRect.fromLocations(locs);
+
+        //Zoom into the bounding box of the cluster. 
+        //Add a padding to compensate for the pixel area of the pushpins.
+        map.setView({
+            bounds: bounds,
+            padding: 100
+        });
+    }
+}
+
+function expandCluster(e) {
+    if (e.target.containedPushpins) {
+        var locs = [];
+        for (var i = 0, len = e.target.containedPushpins.length; i < len; i++) {
+            //Get the location of each pushpin.
+            locs.push(e.target.containedPushpins[i].getLocation());
+        }
+
+        //Create a bounding box for the pushpins.
+        var bounds = Microsoft.Maps.LocationRect.fromLocations(locs);
+
+        //Zoom into the bounding box of the cluster. 
+        //Add a padding to compensate for the pixel area of the pushpins.
+        map.setView({
+            bounds: bounds,
+            padding: 100
+        });
+    }
 }
