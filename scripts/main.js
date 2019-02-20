@@ -40,14 +40,18 @@ function acquireResponse(requestedPage) {
     //map.entities.clear(); //this work only with pins and do not work with clusters
     map.layers.clear();
     page = requestedPage;
-    from = 0;
-    to = 6;
+
 
     $("#job_list").append('<img class="mx-auto d-block" src="img/ajax-loading.gif" alt="loading..." width="100">');
 
     getData(jobQuery, placeQuery, function (data) {
         response = data.results;
         if (response.length > 0) {
+            if (response.length<6){
+                to = response.length;
+            }else{
+                to = 6;
+            }
             console.log(response);
             writeToHTML();
             addPushpins();
@@ -189,7 +193,7 @@ function getData(job, place, cb) {
 
 function GetMap() {
     map = new Microsoft.Maps.Map('#map', {
-        credentials: 'Ardk901xHTnQMsqQm8sYUmbI9R6MC2U1crUKj2S4w9GnC2j_UiCkbZqSpuHPUlTb',
+        //credentials: 'Ardk901xHTnQMsqQm8sYUmbI9R6MC2U1crUKj2S4w9GnC2j_UiCkbZqSpuHPUlTb',
         //center: new Microsoft.Maps.Location(50.50632, -10.12714),
         mapTypeId: Microsoft.Maps.MapTypeId.grayscale,
         disableBirdseye: true,
@@ -197,7 +201,7 @@ function GetMap() {
         showMapTypeSelector: false,
         zoom: 6,
         minZoom: 3,
-        maxZoom: 10
+        maxZoom: 12
     });
 
 }
@@ -220,7 +224,7 @@ function addPushpins() {
                 text: 1,
                 color: "rgba(65, 168, 213, 0.5)"
             });
-            //pin.id = element.id;
+            pin.id = element.id;
 
             // map.entities.push(pin);
             pins.push(pin);
@@ -228,7 +232,7 @@ function addPushpins() {
 
     });
 
-    console.log(pins);
+    //console.log(pins);
 
     Microsoft.Maps.loadModule('Microsoft.Maps.Clustering', function () {
         var clusterLayer = new Microsoft.Maps.ClusterLayer(pins, {
@@ -236,13 +240,11 @@ function addPushpins() {
             gridSize: 80
         });
 
-
-        Microsoft.Maps.Events.addHandler(clusterLayer, 'click', function (e){
-           console.log(e);
-        });
+        Microsoft.Maps.Events.addHandler(clusterLayer, 'click', onClusterClick);
 
         //Microsoft.Maps.Events.addHandler(clusterLayer, 'mouseover', clusterGenerated);
 
+        focusOnCluster(clusterLayer);
         map.layers.insert(clusterLayer);
     });
 
@@ -253,7 +255,7 @@ function addPushpins() {
 function createCustomClusteredPin(cluster) {
     //Define variables for minimum cluster radius, and how wide the outline area of the circle should be.
     var minRadius = 12;
-    var outlineWidth = 7;
+    var outlineWidth = 6;
     //Get the number of pushpins in the cluster
     var clusterSize = cluster.containedPushpins.length;
     //Calculate the radius of the cluster based on the number of pushpins in the cluster, using a logarithmic scale.
@@ -279,14 +281,16 @@ function createCustomClusteredPin(cluster) {
         anchor: new Microsoft.Maps.Point(radius, radius),
         textOffset: new Microsoft.Maps.Point(0, radius - 8) //Subtract 8 to compensate for height of text.
     });
+    
 }
 
-function focusOnCluster() {
-    if (e.target.containedPushpins) {
+function focusOnCluster(cl) {
+    var pins = cl.getPushpins();
+    if (pins) {
         var locs = [];
-        for (var i = 0, len = e.target.containedPushpins.length; i < len; i++) {
+        for (var i = 0; i < pins.length; i++) {
             //Get the location of each pushpin.
-            locs.push(e.target.containedPushpins[i].getLocation());
+            locs.push(pins[i].getLocation());
         }
 
         //Create a bounding box for the pushpins.
@@ -301,22 +305,13 @@ function focusOnCluster() {
     }
 }
 
-function expandCluster(e) {
-    if (e.target.containedPushpins) {
-        var locs = [];
-        for (var i = 0, len = e.target.containedPushpins.length; i < len; i++) {
-            //Get the location of each pushpin.
-            locs.push(e.target.containedPushpins[i].getLocation());
-        }
 
-        //Create a bounding box for the pushpins.
-        var bounds = Microsoft.Maps.LocationRect.fromLocations(locs);
-
-        //Zoom into the bounding box of the cluster. 
-        //Add a padding to compensate for the pixel area of the pushpins.
-        map.setView({
-            bounds: bounds,
-            padding: 100
-        });
-    }
+//Map Events
+function onClusterClick(e) {
+        //focusOnCluster(e.)
+        e = e.target;
+        console.log(typeof e);
+        console.log(e);
+        
+    
 }
