@@ -36,6 +36,8 @@ $('#go').click(function (event) {
 // general functions
 function acquireResponse(requestedPage) {
 
+    $("body").append('<div id="overlay" class="d-flex align-items-center justify-content-center"><img src="img/ajax-loading.gif" alt="loading..." width="100"></div>');
+
     console.log(`input: ${jobQuery}`);
     $('#job_list').html("");
     //map.entities.clear(); //this work only with pins and do not work with clusters
@@ -43,7 +45,6 @@ function acquireResponse(requestedPage) {
     page = requestedPage;
 
 
-    $("#job_list").append('<img class="mx-auto d-block" src="img/ajax-loading.gif" alt="loading..." width="100">');
 
     getData(jobQuery, placeQuery, function (data) {
         response = data.results;
@@ -187,7 +188,7 @@ function getData(job, place, cb) {
             console.log(this.status);
         }
         $("#map").removeClass("_hide");
-        $("#job_list img").remove();
+        $("#overlay").remove();
     };
 }
 
@@ -310,8 +311,8 @@ function focusOnCluster(cl) {
 
 //Map Events
 function onClusterClick(e) {
-
         e = e.target;
+        // console.log(e);
         to = response.length;
         writeToHTML();
         $("#btn_more").html("Display All");
