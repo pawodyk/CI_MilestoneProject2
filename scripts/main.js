@@ -2,6 +2,7 @@
 
 const localisation = "gb";
 
+
 var jobQuery = "";
 var placeQuery = "";
 
@@ -312,6 +313,16 @@ function onClusterClick(e) {
         e = e.target;
         console.log(typeof e);
         console.log(e);
-        
+        to = response.length;
+        writeToHTML();
+        $("#btn_more").html("Display All");
+        $("#job_list>.row").children().addClass("_hide");
+        if(e.containedPushpins){
+            e.containedPushpins.forEach(function(el){
+                $(`#${el.id}`).removeClass("_hide");
+            });
+        } else {
+            $(`#${e.id}`).removeClass("_hide");
+        }
     
 }
