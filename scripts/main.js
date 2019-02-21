@@ -1,7 +1,7 @@
 // global variables:
 
 const localisation = "gb";
-
+var curency = "&pound;";
 
 var jobQuery = "";
 var placeQuery = "";
@@ -39,6 +39,7 @@ function acquireResponse(requestedPage) {
     $("body").append('<div id="overlay" class="d-flex align-items-center justify-content-center"><img src="img/ajax-loading.gif" alt="loading..." width="100"></div>');
 
     console.log(`input: ${jobQuery}`);
+    $("#map").removeClass("_hide");
     $('#job_list').html("");
     //map.entities.clear(); //this work only with pins and do not work with clusters
     map.layers.clear();
@@ -93,24 +94,25 @@ function requestMore() {
 // Write the results to html
 function writeToHTML() {
     console.log("writing to HTML... page: " + page + "; results:" + from + "-->" + to);
-    var html = '<div class="row ">';
+    var html = '<div class="row m-2">';
+    
 
     for (let index = from; index < to; index++) {
         const element = response[index];
         let time = calculateTime(element.created);
         let description = shorten(element.description, 400);
-        let company = shorten(element.company.display_name, 20);
-        let salary = element.salary_min != element.salary_max ? "&pound; " + element.salary_min + " - &pound; " + element.salary_max : "&pound; " + element.salary_max;
+        //let company = shorten(element.company.display_name, 20);
+        let salary = element.salary_min != element.salary_max ? `${curency} ${element.salary_min} - ${curency} ${element.salary_max}` : `${curency} ${element.salary_max}`;
 
         html += `<div id="${element.id}" class="col-12 col-sm-6 col-lg-4 p-1 shadow">
-                <div class="job_box">
+                <div class="job_box p-1 m-2">
                     <h2 class="job_title">${element.title}</h2>
                     <div class="details_container clearfix">
-                        <div class="float-left">
-                            <div class="job_company details"><i class="fas fa-building" style="color:blue;"></i>&nbsp;${company}</div>
+                        <div class="details_group float-left">
+                            <div class="job_company details"><i class="fas fa-building" style="color:blue;"></i>&nbsp;${element.company.display_name}</div>
                             <div class="job_location details"><i class="fas fa-map-marked-alt" style="color:red;"></i>&nbsp;${element.location.display_name}</div>
                         </div>
-                        <div class="float-right">
+                        <div class="details_group float-right">
                             <div class="details"><i class="fas fa-money-bill-alt" style="color:green;"></i>&nbsp;${salary}</div>
                             <div class="job_date details"><i class="fas fa-business-time" style="color:orange;"></i>&nbsp;${time}</div>
 
@@ -187,7 +189,6 @@ function getData(job, place, cb) {
         } else {
             console.log(this.status);
         }
-        $("#map").removeClass("_hide");
         $("#overlay").remove();
     };
 }
@@ -195,6 +196,7 @@ function getData(job, place, cb) {
 //BING Maps API:
 
 function GetMap() {
+    
     map = new Microsoft.Maps.Map('#map', {
         //credentials: 'Ardk901xHTnQMsqQm8sYUmbI9R6MC2U1crUKj2S4w9GnC2j_UiCkbZqSpuHPUlTb',
         //center: new Microsoft.Maps.Location(50.50632, -10.12714),
@@ -210,7 +212,7 @@ function GetMap() {
 }
 
 function addPushpins() {
-
+    
     var pins = [];
     response.forEach(function (element) {
 
