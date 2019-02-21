@@ -38,7 +38,7 @@ function acquireResponse(requestedPage) {
 
     $("body").append('<div id="overlay" class="d-flex align-items-center justify-content-center"><img src="img/ajax-loading.gif" alt="loading..." width="100"></div>');
 
-    console.log(`input: ${jobQuery}`);
+    console.log(`input: ${jobQuery}@${placeQuery}`);
     $("#map").removeClass("_hide");
     $('#job_list').html("");
     //map.entities.clear(); //this work only with pins and do not work with clusters
@@ -109,8 +109,8 @@ function writeToHTML() {
                     <h2 class="job_title">${element.title}</h2>
                     <div class="details_container clearfix">
                         <div class="details_group float-left">
-                            <div class="job_company details"><i class="fas fa-building" style="color:blue;"></i>&nbsp;${element.company.display_name}</div>
-                            <div class="job_location details"><i class="fas fa-map-marked-alt" style="color:red;"></i>&nbsp;${element.location.display_name}</div>
+                            <div class="job_company details"><i class="fas fa-building" style="color:blue;"></i>&nbsp;<span title="${element.company.display_name}">${element.company.display_name}</span></div>
+                            <div class="job_location details"><i class="fas fa-map-marked-alt" style="color:red;"></i>&nbsp;<span title="${element.location.display_name}">${element.location.display_name}</span></div>
                         </div>
                         <div class="details_group float-right">
                             <div class="details"><i class="fas fa-money-bill-alt" style="color:green;"></i>&nbsp;${salary}</div>
