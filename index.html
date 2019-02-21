@@ -4,8 +4,9 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Milestone Project 2</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Milestone Project 2</title>
 
     <link rel="stylesheet" type="text/css" href="styles/bootstrap.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -14,123 +15,34 @@
 </head>
 
 <body>
-
-    <header>
-        <nav class="navbar navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Developer Jobsearch</a>
-            <!-- <div class="float-right">
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
-                </form>
-            </div> -->
-        </nav>
-    </header>
-
-    <main>
+    <div class="banner">
+        <header>
+            <h1 class="text-center">Jobs in IT</h1>
+            <hr class="my-4">
+            <div class="searchbox input-group d-flex justify-content-center">
+                <div class="p-2">
+                    <input id="input_job" class="input shadow p-2 bg-white rounded " type="search" value="" placeholder="Job" />
+                    <input id="input_place" class="input shadow p-2 bg-white rounded " type="search" value="" placeholder="Place" />
+                </div>
+                <div class="p-1">
+                    <button id="go" class="btn btn-lg btn-primary p-2 shadow" type="submit">GO!</button>
+                </div>
+            </div>
+        </header>
         <div class="container main-container">
             <div class="row">
                 <div class="col">
-                    <div class="searchbox">
-                        <div class="input-group">
-                            <input id="input_job" class="input shadow p-2 bg-white rounded " type="search" value="" placeholder="Job"/>
-                            <input id="input_place" class="input shadow p-2 bg-white rounded " type="search" value="" placeholder="Place"/>
-                            <button id="go" class="btn btn-primary p-2 shadow" type="submit">GO!</button>
-                            
-                        </div>
-                    </div>
+                    <div id="map" class="_hide"></div>
                 </div>
             </div>
             <div class="row">
-                <div class="col">
-                    <div id="map"></div>
-                </div>
+                <div id="job_list" class="container"></div>
             </div>
-            <div class="row">
-                <div id="job_list" class="container ">
-                    <!-- <div class="row ">
-                        <div class="col-4 job-box ">
-                            <h2 class="job-title">Javascript Developer</h2>
-                            <div class="details-container">
-
-                                <span class="job-company details"> <i class="fas fa-building"></i> hackajob Client</span>
-                                <span class="job-location details"> <i class="fas fa-map-marked-alt"></i> London, UK</span>
-                                <span class="job-date details"> <i class="far fa-calendar-alt"></i> 6d</span>
-
-                            </div>
-                            <p class="job-description">Preferred Skills: Java, React, Agile, AWS, TDD, BDD, Microservices, Google Cloud Platform, Microsoft Azure, Cloud Foundry, Continuous Integration, Continuous Deployment, Docker ...</p>
-                            <button class="btn btn-success float-right" type="submit">Apply</button>
-                        </div>
-                        <div class="col-4 job-box ">
-                            <h2 class="job-title">Javascript Developer</h2>
-                            <div class="details-container">
-
-                                <span class="job-company details"> <i class="fas fa-building"></i> hackajob Client</span>
-                                <span class="job-location details"> <i class="fas fa-map-marked-alt"></i> London, UK</span>
-                                <span class="job-date details "> <i class="far fa-calendar-alt"></i> 6d</span>
-
-                            </div>
-                            <p class="job-description">Preferred Skills: Java, React, Agile, AWS, TDD, BDD, Microservices, Google Cloud Platform, Microsoft Azure, Cloud Foundry, Continuous Integration, Continuous Deployment, Docker ...</p>
-                            <button class="btn btn-success float-right" type="submit">Apply</button>
-                        </div>
-                        <div class="col-4 job-box ">
-                            <h2 class="job-title">Javascript Developer</h2>
-                            <div class="details-container">
-
-                                <span class="job-company details"> <i class="fas fa-building"></i> hackajob Client</span>
-                                <span class="job-location details"> <i class="fas fa-map-marked-alt"></i> London, UK</span>
-                                <span class="job-date details"> <i class="far fa-calendar-alt"></i> 6d</span>
-
-                            </div>
-                            <p class="job-description">Preferred Skills: Java, React, Agile, AWS, TDD, BDD, Microservices, Google Cloud Platform, Microsoft Azure, Cloud Foundry, Continuous Integration, Continuous Deployment, Docker ...</p>
-                            <button class="btn btn-success float-right" type="submit">Apply</button>
-                        </div>
-                    </div>
-                    <div class="row ">
-                        <div class="col-4 job-box ">
-                            <h2 class="job-title">Javascript Developer</h2>
-                            <div class="details-container">
-
-                                <span class="job-company details"> <i class="fas fa-building"></i> hackajob Client</span>
-                                <span class="job-location details"> <i class="fas fa-map-marked-alt"></i> London, UK</span>
-                                <span class="job-date details"> <i class="far fa-calendar-alt"></i> 6d</span>
-
-                            </div>
-                            <p class="job-description">Preferred Skills: Java, React, Agile, AWS, TDD, BDD, Microservices, Google Cloud Platform, Microsoft Azure, Cloud Foundry, Continuous Integration, Continuous Deployment, Docker ...</p>
-                            <button class="btn btn-success float-right" type="submit">Apply</button>
-                        </div>
-                        <div class="col-4 job-box ">
-                            <h2 class="job-title">Javascript Developer</h2>
-                            <div class="details-container">
-
-                                <span class="job-company details"> <i class="fas fa-building"></i> hackajob Client</span>
-                                <span class="job-location details"> <i class="fas fa-map-marked-alt"></i> London, UK</span>
-                                <span class="job-date details"> <i class="far fa-calendar-alt"></i> 6d</span>
-
-                            </div>
-                            <p class="job-description">Preferred Skills: Java, React, Agile, AWS, TDD, BDD, Microservices, Google Cloud Platform, Microsoft Azure, Cloud Foundry, Continuous Integration, Continuous Deployment, Docker ...</p>
-                            <button class="btn btn-success float-right" type="submit">Apply</button>
-                        </div>
-                        <div class="col-4 job-box ">
-                            <h2 class="job-title">Javascript Developer</h2>
-                            <div class="details-container">
-
-                                <span class="job-company details"> <i class="fas fa-building"></i> hackajob Client</span>
-                                <span class="job-location details"> <i class="fas fa-map-marked-alt"></i> London, UK</span>
-                                <span class="job-date details"> <i class="far fa-calendar-alt"></i> 6d</span>
-
-                            </div>
-                            <p class="job-description">Preferred Skills: Java, React, Agile, AWS, TDD, BDD, Microservices, Google Cloud Platform, Microsoft Azure, Cloud Foundry, Continuous Integration, Continuous Deployment, Docker ...</p>
-                            <button class="btn btn-success float-right" type="submit">Apply</button>
-                        </div>
-                    </div> -->
-                </div>
-            </div>
+        </div>
+        <div>
 
         </div>
-
-    </main>
-
+    </div>
     <footer class="bg-dark text-light">
         &copy;Pawel Wodyk - <i>Milestone Project 2</i>
     </footer>

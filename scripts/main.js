@@ -186,6 +186,7 @@ function getData(job, place, cb) {
         } else {
             console.log(this.status);
         }
+        $("#map").removeClass("_hide");
         $("#job_list img").remove();
     };
 }
@@ -201,7 +202,7 @@ function GetMap() {
         disableStreetside: true,
         showMapTypeSelector: false,
         zoom: 6,
-        minZoom: 3,
+        minZoom: 4,
         maxZoom: 12
     });
 
@@ -309,10 +310,8 @@ function focusOnCluster(cl) {
 
 //Map Events
 function onClusterClick(e) {
-        //focusOnCluster(e.)
+
         e = e.target;
-        console.log(typeof e);
-        console.log(e);
         to = response.length;
         writeToHTML();
         $("#btn_more").html("Display All");
