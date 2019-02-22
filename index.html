@@ -17,19 +17,17 @@
 <body>
 
     <div class="banner">
-        <header>
-            <div class="title">
-                <h1 class="text-center">Get IT</h1>
-                <h2>interactive job search powered by adzuna API and Bing Maps</h2>
-                <hr class="my-4">
+        <header class="d-flex flex-column">
+            <div class="title d-flex flex-column justify-content-center">
+                <h1 class="text-center py-4 mx-auto">Get Job in IT</h1>
             </div>
-            <div class="searchbox input-group d-flex justify-content-center">
-                <div class="p-2">
-                    <input id="input_job" class="input shadow p-2 bg-white rounded " type="search" value="" placeholder="Job" />
-                    <input id="input_place" class="input shadow p-2 bg-white rounded " type="search" value="" placeholder="Place" />
+            <div class="searchbox my-5 p-3 d-flex align-self-center flex-md-row flex-column justify-content-center align-items-center">
+                <div class="p-2 d-flex flex-row flex-wrap justify-content-around align-content-around">
+                    <input id="input_job" class="input shadow p-2 bg-white rounded m-1" type="search" value="" placeholder="Job" />
+                    <input id="input_place" class="input shadow p-2 bg-white rounded m-1" type="search" value="" placeholder="Place" />
                 </div>
-                <div class="p-1">
-                    <button id="go" class="btn btn-lg btn-primary p-2 shadow" type="submit">GO!</button>
+                <div class="p-1 d-flex align-items-center justify-content-center">
+                    <button id="go" class="btn btn-lg btn-primary shadow" type="submit">Find IT!</button>
                 </div>
             </div>
         </header>
@@ -39,11 +37,17 @@
                     <div id="map" class="my-2 _hide"></div>
                 </div>
             </div>
+            <div id="msg_box" class="row _hide">
+                <div class="col-12">
+                    <div id="msg_content" class="d-flex justify-content-between alert alert-success text-center m-2 p-2">
+                        
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div id="job_list" class="container">
-                    
 
-
+                    <!-- end of job_list -->
                 </div>
             </div>
         </div>

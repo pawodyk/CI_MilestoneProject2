@@ -1,21 +1,21 @@
-// global variables:
+//global variables that could be used in the future to modify the search
+const results = 48; // 1-50
+const daysOld = 10;
 
-const localisation = "gb";
-var curency = "&pound;";
+// gb au at br ca de fr in it nl nz pl ru sg us za
+const localisation = "gb"; 
+const curency = "&pound;";
 
+
+
+//global variables
+var page = 1;
+var to = 6;
 var jobQuery = "";
 var placeQuery = "";
 
-var from = 0;
-var to = 6;
 var response = [];
-
-//API variables
-var page = 1;
-var results = 48; // => 48
-var daysOld = 10;
 var map;
-
 
 //input functions
 $('.input').keydown(function (event) {
@@ -39,13 +39,14 @@ function acquireResponse(requestedPage) {
     $("body").append('<div id="overlay" class="d-flex align-items-center justify-content-center"><img src="img/ajax-loading.gif" alt="loading..." width="100"></div>');
 
     console.log(`input: ${jobQuery}@${placeQuery}`);
+    
+    clearJobList();
+
+    //display map
     $("#map").removeClass("_hide");
-    $('#job_list').html("");
-    //map.entities.clear(); //this work only with pins and do not work with clusters
     map.layers.clear();
+
     page = requestedPage;
-
-
 
     getData(jobQuery, placeQuery, function (data) {
         response = data.results;
@@ -56,10 +57,11 @@ function acquireResponse(requestedPage) {
                 to = 6;
             }
             console.log(response);
+            
             writeToHTML();
             addPushpins();
         } else {
-            $('#job_list').html('<p style="text-align: center; font-size: 3em;">no results found...</p>');
+            messageUser(`<div class="message_text flex-grow-1 ml-5 my-auto"><div>No Jobs Found<span class="badge badge-warning">!!!</span></div></div>`);
         }
 
     });
@@ -68,7 +70,7 @@ function acquireResponse(requestedPage) {
 function displayMore() {
 
     $("#btn_more").remove();
-    //from += 6;
+    clearJobList()
     if (response.length > to + 6) {
         to += 6;
         writeToHTML();
@@ -82,8 +84,9 @@ function displayMore() {
 }
 
 function requestMore() {
-    $("#btn_more").remove();
-    $("#job_list").html("");
+    //$("#btn_more").remove();
+
+    clearJobList();
 
     page++;
 
@@ -91,10 +94,22 @@ function requestMore() {
     console.log("requested next " + results + " jobs from server");
 }
 
+function clearJobList(){
+    $('#msg_box').addClass("_hide");
+    $("#job_list").html("");
+}
+
+function messageUser(message){
+    $('#msg_box').removeClass("_hide");
+    $('#msg_content').html("");
+    $('#msg_content').html(`${message}`);
+}
+
 // Write the results to html
 function writeToHTML() {
+    var from = 0;
     console.log("writing to HTML... page: " + page + "; results:" + from + "-->" + to);
-    var html = '<div class="row m-2">';
+    var html = '<div class="row my-1 px-2">';
     
 
     for (let index = from; index < to; index++) {
@@ -104,28 +119,35 @@ function writeToHTML() {
         //let company = shorten(element.company.display_name, 20);
         let salary = element.salary_min != element.salary_max ? `${curency} ${element.salary_min} - ${curency} ${element.salary_max}` : `${curency} ${element.salary_max}`;
 
-        html += `<div id="${element.id}" class="col-12 col-sm-6 col-lg-4 p-1 shadow">
-                <div class="job_box p-1 m-2">
-                    <h2 class="job_title">${element.title}</h2>
-                    <div class="details_container clearfix">
-                        <div class="details_group float-left">
+        html += 
+        `<div id="${element.id}" class="col-12 col-md-6 col-lg-4 p-0">
+            <div class="d-flex flex-column card shadow m-2">
+                <div class="job_box card-body pb-0">
+                    <div class="job_title d-flex align-items-center justify-content-center">
+                        <h3>${element.title}</h3>
+                    </div>
+                    <div class="details_container d-flex flex-sm-row flex-column justify-content-between">
+                        <div class="details_group float-left d-inline-flex flex-column">
                             <div class="job_company details"><i class="fas fa-building" style="color:blue;"></i>&nbsp;<span title="${element.company.display_name}">${element.company.display_name}</span></div>
                             <div class="job_location details"><i class="fas fa-map-marked-alt" style="color:red;"></i>&nbsp;<span title="${element.location.display_name}">${element.location.display_name}</span></div>
                         </div>
-                        <div class="details_group float-right">
-                            <div class="details"><i class="fas fa-money-bill-alt" style="color:green;"></i>&nbsp;${salary}</div>
-                            <div class="job_date details"><i class="fas fa-business-time" style="color:orange;"></i>&nbsp;${time}</div>
-
+                        <div class="details_group float-right d-inline-flex flex-column">
+                            <div class="details"><i class="fas fa-money-bill-alt" style="color:green;"></i>&nbsp;<span title="${salary}">${salary}</span></div>
+                            <div class="job_date details"><i class="fas fa-business-time" style="color:orange;"></i>&nbsp;<span title="${time}">${time}</span></div>
                         </div>
-                        
                     </div>
-                    <p class="job_description">${description}</p>
+                    <div class="job_description d-flex align-items-stretch justify-content-center">
+                        <p class="m-0 p-0">${description}</p>
+                    </div>
                 </div>
-                <a class="btn btn-success text-center btn_apply p-2" href="${element.redirect_url}" target="_blank">Apply</a>
-                </div>`;
+                <div class="align-bottom d-flex px-1 align-items-end">
+                    <a class="btn btn-success text-center btn_apply p-2" href="${element.redirect_url}" target="_blank">Apply</a>
+                </div>
+            </div>
+        </div>`;
     }
     html += `</div> 
-            <button id="btn_more" class="btn btn-primary p-2 shadow float-right" type="submit" onclick="displayMore()">MORE!</button>`;
+            <button id="btn_more" class="btn btn-primary p-2 m-1 shadow float-right" type="submit" onclick="displayMore()">MORE!</button>`;
 
     $('#job_list').html(html);
 }
@@ -186,12 +208,12 @@ function getData(job, place, cb) {
     xhr.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             cb(JSON.parse(this.responseText));
-        } else {
-            console.log(this.status);
         }
         $("#overlay").remove();
     };
 }
+
+
 
 //BING Maps API:
 
@@ -199,7 +221,7 @@ function GetMap() {
     
     map = new Microsoft.Maps.Map('#map', {
         //credentials: 'Ardk901xHTnQMsqQm8sYUmbI9R6MC2U1crUKj2S4w9GnC2j_UiCkbZqSpuHPUlTb',
-        //center: new Microsoft.Maps.Location(50.50632, -10.12714),
+        //center: pointTo,
         mapTypeId: Microsoft.Maps.MapTypeId.grayscale,
         disableBirdseye: true,
         disableStreetside: true,
@@ -316,15 +338,85 @@ function onClusterClick(e) {
         e = e.target;
         // console.log(e);
         to = response.length;
+        var location = "";
         writeToHTML();
+        
         $("#btn_more").html("Display All");
         $("#job_list>.row").children().addClass("_hide");
         if(e.containedPushpins){
             e.containedPushpins.forEach(function(el){
+                if(location === "" || location === el.entity.title){
+                    location = el.entity.title;
+                } else {
+                    location = "Multiple Locations";
+                }
+                
                 $(`#${el.id}`).removeClass("_hide");
             });
         } else {
+            console.log(e);
+            location = e.entity.title;//.location.display_name;
             $(`#${e.id}`).removeClass("_hide");
         }
-    
+        messageUser(`<div class="message_text flex-grow-1 ml-5 my-auto"><div>Displaying jobs in : <span class="badge badge-info">${location}</span></div></div><div><button class="btn btn-primary p-2 shadow float-right" type="submit" onclick="displayMore()">Display All</button></div>`);
 }
+
+//====================== Possible implementation for the future ===================
+/*
+
+var pointTo = new Microsoft.Maps.Location(50.50632, -10.12714);
+
+function setCountry(location) {
+    // gb au at br ca de fr in it nl nz pl ru sg us za
+    localisation = location; 
+    if (location === "gb"){
+        curency = "&pound;";
+        pointTo = new Microsoft.Maps.Location(53.943832, -2.550564);
+    }else if (location === "au") {
+        curency = "&#36;";
+        pointTo = new Microsoft.Maps.Location(-25.578938, 134.359711);
+    }else if (location === "at") {
+        curency = "&euro;";
+        pointTo = new Microsoft.Maps.Location(47.587086, 14.141286);
+    }else if (location === "br") {
+        curency = "BRL";
+        pointTo = new Microsoft.Maps.Location(-10.776803, -53.068085);
+    }else if (location === "ca") {
+        curency = "&#36;";
+        pointTo = new Microsoft.Maps.Location(62.536041, -96.388351);
+    }else if (location === "de") {
+        curency = "&euro;";
+        pointTo = new Microsoft.Maps.Location(51.121807, 10.400695);
+    }else if (location === "fr") {
+        curency = "&euro;";
+        pointTo = new Microsoft.Maps.Location(46.621841, 2.451944);
+    }else if (location === "in") {
+        curency = "&#8377;";
+        pointTo = new Microsoft.Maps.Location(22.493118, 79.727013);
+    }else if (location === "it") {
+        curency = "&euro;";
+        pointTo = new Microsoft.Maps.Location(43.52903, 12.162184);
+    }else if (location === "nl") {
+        curency = "&euro;";
+        pointTo = new Microsoft.Maps.Location(52.342258, 5.528157);
+    }else if (location === "nz") {
+        curency = "&#36;";
+        pointTo = new Microsoft.Maps.Location(-43.947639, 170.502869);
+    }else if (location === "pl") {
+        curency = "PLN";
+        pointTo = new Microsoft.Maps.Location(52.12904, 19.393702);
+    }else if (location === "ru") {
+        curency = "&#x20bd;";
+        pointTo = new Microsoft.Maps.Location(56.133307, 40.407715);
+    }else if (location === "sg") {
+        curency = "&pound;";
+        pointTo = new Microsoft.Maps.Location(1.35757, 103.810226);
+    }else if (location === "us") {
+        curency = "&#36;";
+        pointTo = new Microsoft.Maps.Location(39.495914, -98.989983);
+    }else if (location === "za") {
+        curency = "R";
+        pointTo = new Microsoft.Maps.Location(-29.00231, 25.080317);
+    }
+}
+*/
