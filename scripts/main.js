@@ -1,15 +1,27 @@
 //global variables that could be used in the future to modify the search
+// since I was aiming for simplicity I hard coded the days_ago and number of results variables
+// by default it displays only results 10 days old and 48 results per call
+// 48 was chosen because it is closest number to maximum value of 50 and 
+// is divisible by 3 and 2 which is important for user experience since the cards are displayed 
+// - by 3 for desktop - by 2 for tablets and - by 1 on smartphones.
 const results = 48; // 1-50
 const daysOld = 10;
 
+// hardcoded curency and country for Adzuna API call
 // gb au at br ca de fr in it nl nz pl ru sg us za
 const localisation = "gb"; 
 const curency = "&pound;";
 
 
+/* ================== global variables ====================*/
+// @page holds page number for request from server
+// @to current number of results to display
+// @jobQuery result of the input tag #input_job
+// @placeQuery result of the input tag #input_place
+// @responce hold the array of results received from Adzuna API - to preserve api calls
+// @map hold the Microsoft.Maps.Map variable from bing maps
 
-//global variables
-var page = 1;
+var page = 1;   
 var to = 6;
 var jobQuery = "";
 var placeQuery = "";
@@ -17,7 +29,10 @@ var placeQuery = "";
 var response = [];
 var map;
 
-//input functions
+/* ================== input functions ===================*/
+
+// jquery functions taking the value inputed via input field
+// listen for event of pressing enter key in a filed
 $('.input').keydown(function (event) {
     if (event.keyCode == 13) {
         jobQuery = $('#input_job').val();
@@ -26,6 +41,7 @@ $('.input').keydown(function (event) {
     }
 });
 
+// listens for the button click event from #go button
 $('#go').click(function (event) {
     jobQuery = $('#input_job').val();
     placeQuery = $('#input_place').val();
@@ -33,12 +49,22 @@ $('#go').click(function (event) {
 });
 
 
-// general functions
+/* ===================== general functions =======================*/
+
+// acquireResponce(int:@requestedPage)
+//  displays the overlay to prevent multiple calls to the server while the data is loading
+//  prepares the document by clearing the #job_list and map from previous results and ensures the map is not hiden
+//  asign @requestedPage to the page variable
+//  calls the getData(@obQuery,@placeQuery,@function (data){}) to aquire the results from the server
+//  calls the writeToHTML() to display the results on the page
+//  calls the addPushpins() to render the pins/clusters on the map
+//  in case of no results provided from the server the message is displayed to the user
+
 function acquireResponse(requestedPage) {
 
     $("body").append('<div id="overlay" class="d-flex align-items-center justify-content-center"><img src="img/ajax-loading.gif" alt="loading..." width="100"></div>');
 
-    console.log(`input: ${jobQuery}@${placeQuery}`);
+    //console.log(`input: ${jobQuery}@${placeQuery}`);
     
     clearJobList();
 
@@ -56,48 +82,53 @@ function acquireResponse(requestedPage) {
             }else{
                 to = 6;
             }
-            console.log(response);
             
             writeToHTML();
             addPushpins();
         } else {
-            messageUser(`<div class="message_text flex-grow-1 ml-5 my-auto"><div>No Jobs Found<span class="badge badge-warning">!!!</span></div></div>`);
+            messageUser(`<div class="message_text flex-grow-1 ml-2 my-auto"><div><span class="badge badge-info align-middle">!!!</span>&nbsp;No Jobs Found...</div></div>`);
         }
 
     });
 }
 
-function displayMore() {
+// displayMore()
+//  displays more results in the intervals of 6 (48%6 == 0)
+//  if all the results are displayed it changes the content of the more button to request more results from server
 
+function displayMore() {
     $("#btn_more").remove();
-    clearJobList()
+    clearJobList();
     if (response.length > to + 6) {
         to += 6;
         writeToHTML();
-        //console.log("more...");
     } else {
         to = response.length;
         writeToHTML();
         $("#btn_more").html("Request next " + results + " jobs from the server").attr("onclick", "requestMore()");
-        console.log(`all ${results} jobs displayed...`);
     }
 }
 
-function requestMore() {
-    //$("#btn_more").remove();
+// requestMore()
+//  increases the page by 1 and calls the acquireResponse(@page) to request next 48 results from the server 
 
-    clearJobList();
-
+function requestMore() { 
     page++;
-
     acquireResponse(page);
     console.log("requested next " + results + " jobs from server");
 }
+
+// clearJobList()
+//  clears the #job_list from old results
+//  hides the message box
 
 function clearJobList(){
     $('#msg_box').addClass("_hide");
     $("#job_list").html("");
 }
+
+// messageUser(string:@message)
+// displays @message to the user in the predefined #msg_box
 
 function messageUser(message){
     $('#msg_box').removeClass("_hide");
@@ -105,7 +136,12 @@ function messageUser(message){
     $('#msg_content').html(`${message}`);
 }
 
-// Write the results to html
+//  writeToHTML()
+//  -Write the results to html-
+//  itterates through results to extract required information
+//  writes the information to the html string with the aproprate tags and structure 
+//  injects prepreperd html string using jquery to the document
+
 function writeToHTML() {
     var from = 0;
     console.log("writing to HTML... page: " + page + "; results:" + from + "-->" + to);
@@ -152,8 +188,11 @@ function writeToHTML() {
     $('#job_list').html(html);
 }
 
-// WriteToHTML() helper classes
+/* ================== WriteToHTML() helper classes =========================*/
 
+// shorten (string:@word, int:@maxLength)
+// takes the string @word and shorten it to the lenght passed by @maxLength
+// used to remove the <strong> tags and shorten the desription received from Adzuna API
 function shorten(word, maxLength) {
     var shortened;
     if (typeof word !== "undefined") {
@@ -165,6 +204,10 @@ function shorten(word, maxLength) {
     return shortened;
 }
 
+// calculateTime(Date:@time)
+// takes the @time value and subtract it from the current date
+// used to calculate time passed since the ad was posted
+// note: work only for current time zone 
 function calculateTime(time) {
     let result = (new Date() - new Date(time)) / (1000 * 60);
     if (result < 60) {
@@ -185,9 +228,13 @@ function calculateTime(time) {
 
 
 
-// ================== API s ===========================
+/* ======================== API s =========================== */
 
-//Call to Adzuna API
+// getData(string:@job,string:@place,function:@cb)
+// Call to Adzuna API use @place and @job in the request to adzuna server
+// return the json data as a parameter in @cb function
+// removes #overlay tag after the callback
+
 function getData(job, place, cb) {
 
     const appID = '0bbe3156';
@@ -215,7 +262,10 @@ function getData(job, place, cb) {
 
 
 
-//BING Maps API:
+/* ============ BING Maps API: ================= */
+
+// GetMap()
+// request and renders the Bing map in the #map tag
 
 function GetMap() {
     
@@ -233,12 +283,16 @@ function GetMap() {
 
 }
 
+// addPushpins()
+// adds pushpins to the map and adds them into pins clusters
+// display clusters on the map as a layer using custom cluster options taken from "bing maps APi examples"[link in the readme file]
+// adds the click event to each cluster/pin, which invokes onClusterClick() function
+// calls focusOnCluster(ClusterLayer) before it renders the clusters/pins in order to focus on the cluster
+
 function addPushpins() {
     
     var pins = [];
     response.forEach(function (element) {
-
-        //console.log(element);
 
         if (typeof element.latitute != 'number' && typeof element.longitude != 'number') {
             console.log("invalid coordinates: " + typeof element.latitude + ", " + typeof element.longitude);
@@ -259,8 +313,6 @@ function addPushpins() {
 
     });
 
-    //console.log(pins);
-
     Microsoft.Maps.loadModule('Microsoft.Maps.Clustering', function () {
         var clusterLayer = new Microsoft.Maps.ClusterLayer(pins, {
             clusteredPinCallback: createCustomClusteredPin,
@@ -269,8 +321,6 @@ function addPushpins() {
 
         Microsoft.Maps.Events.addHandler(clusterLayer, 'click', onClusterClick);
 
-        //Microsoft.Maps.Events.addHandler(clusterLayer, 'mouseover', clusterGenerated);
-
         focusOnCluster(clusterLayer);
         map.layers.insert(clusterLayer);
     });
@@ -278,7 +328,10 @@ function addPushpins() {
 }
 
 
-// this code was taken from Microsoft Documents Customizing Clustered Pushpins Example:
+// NOTE: this code was taken from Microsoft Documents - Customizing Clustered Pushpins Example:
+// createCustomClusterPin(ClusterLayer:@cluster)
+// takes default Microsoft.Maps.ClusterLayer and modify the options to display custom svg visuals
+
 function createCustomClusteredPin(cluster) {
     //Define variables for minimum cluster radius, and how wide the outline area of the circle should be.
     var minRadius = 12;
@@ -311,6 +364,11 @@ function createCustomClusteredPin(cluster) {
     
 }
 
+// NOTE: this code was taken from Microsoft Documents - Zoom into Clusters Example:
+// focusOnCluster(ClusterLayer:cl)
+// modified code from the microsoft bing maps api
+// takes Microsoft.Maps.ClusterLayer and chages the view of the bing map to the clusters displayed
+
 function focusOnCluster(cl) {
     var pins = cl.getPushpins();
     if (pins) {
@@ -333,10 +391,16 @@ function focusOnCluster(cl) {
 }
 
 
-//Map Events
+/* ===================== Map Events ========================= */
+
+// onClusterClick(Event:@e)
+// invoked on click from the cluser
+// removes the job cards and then adds only the cards that match the id of the jobs in the cluster selected
+// calls messageUser(string) - which adds message to the user informing them on the location selected
+//                              or displays "multiple locations" if the user select cluster with diferent locations
+
 function onClusterClick(e) {
         e = e.target;
-        // console.log(e);
         to = response.length;
         var location = "";
         writeToHTML();
@@ -354,16 +418,18 @@ function onClusterClick(e) {
                 $(`#${el.id}`).removeClass("_hide");
             });
         } else {
-            console.log(e);
-            location = e.entity.title;//.location.display_name;
+            location = e.entity.title;
             $(`#${e.id}`).removeClass("_hide");
         }
-        messageUser(`<div class="message_text flex-grow-1 ml-5 my-auto"><div>Displaying jobs in : <span class="badge badge-info">${location}</span></div></div><div><button class="btn btn-primary p-2 shadow float-right" type="submit" onclick="displayMore()">Display All</button></div>`);
+        messageUser(`<div class="message_text flex-grow-1 ml-1 ml-lg-5 my-auto"><div>Displaying jobs in&nbsp;: <span class="badge badge-info">${location}</span></div></div><div><button class="btn btn-primary p-2 shadow float-right" type="submit" onclick="displayMore()">Display All</button></div>`);
 }
 
-//====================== Possible implementation for the future ===================
-/*
+/* ====================== Possible implementation for the future =================== */
 
+//posible improvement.. would change the country of search based on the available countries in Adzuna API
+// would have to change the currency as well as time zones for the calculateTime(Date) function
+
+/*
 var pointTo = new Microsoft.Maps.Location(50.50632, -10.12714);
 
 function setCountry(location) {
