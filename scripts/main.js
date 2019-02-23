@@ -5,7 +5,7 @@
 // is divisible by 3 and 2 which is important for user experience since the cards are displayed 
 // - by 3 for desktop - by 2 for tablets and - by 1 on smartphones.
 const results = 48; // 1-50
-const daysOld = 10;
+const daysOld = 15;
 
 // hardcoded curency and country for Adzuna API call
 // gb au at br ca de fr in it nl nz pl ru sg us za
@@ -76,6 +76,7 @@ function acquireResponse(requestedPage) {
 
     getData(jobQuery, placeQuery, function (data) {
         response = data.results;
+        //console.log(response); // returns the array of responses to the console
         if (response.length > 0) {
             if (response.length<6){
                 to = response.length;
@@ -144,7 +145,7 @@ function messageUser(message){
 
 function writeToHTML() {
     var from = 0;
-    console.log("writing to HTML... page: " + page + "; results:" + from + "-->" + to);
+    //console.log("writing to HTML... page: " + page + "; results:" + from + "-->" + to); // shows the requested page and number of results being added to the html - for debuging and testing 
     var html = '<div class="row my-1 px-2">';
     
 
