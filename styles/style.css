@@ -45,12 +45,12 @@ body {
 }
 
 header .title {
-  background-color: rgba(80, 80, 80, 0.4);
+  background-color: rgba(66, 66, 66, 0.6);
   text-align: center;
 }
 header .title h1 {
   color: white;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: "Work Sans" sans-serif;
   font-size: 4rem;
   font-weight: 900;
 }
@@ -123,13 +123,12 @@ header .searchbox {
 }
 
 footer {
-  padding: 2em;
   width: 100%;
   position: relative;
   bottom: 0;
   left: 0;
-  margin-top: auto;
-  min-height: 80px;
+  right: 0;
+  min-height: 120px;
   height: 10vh;
 }
 
