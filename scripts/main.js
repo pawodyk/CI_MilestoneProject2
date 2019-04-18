@@ -12,6 +12,9 @@ const daysOld = 15;
 const localisation = "gb"; 
 const curency = "&pound;";
 
+// added time difference to offset the conversion of time from string to local date
+const timeDif = 60;
+
 
 /* ================== global variables ====================*/
 // @page holds page number for request from server
@@ -76,7 +79,7 @@ function acquireResponse(requestedPage) {
 
     getData(jobQuery, placeQuery, function (data) {
         response = data.results;
-        //console.log(response); // returns the array of responses to the console
+        console.log(response); // returns the array of responses to the console
         if (response.length > 0) {
             if (response.length<6){
                 to = response.length;
@@ -155,7 +158,7 @@ function writeToHTML() {
         let description = shorten(element.description, 400);
         //let company = shorten(element.company.display_name, 20);
         let salary = element.salary_min != element.salary_max ? `${curency} ${element.salary_min} - ${curency} ${element.salary_max}` : `${curency} ${element.salary_max}`;
-
+        
         html += 
         `<div id="${element.id}" class="col-12 col-md-6 col-lg-4 p-0">
             <div class="d-flex flex-column card shadow m-2">
@@ -210,7 +213,14 @@ function shorten(word, maxLength) {
 // used to calculate time passed since the ad was posted
 // note: work only for current time zone 
 function calculateTime(time) {
-    let result = (new Date() - new Date(time)) / (1000 * 60);
+
+    var currentDate = new Date();
+    
+    var adDate = new Date(time);
+    
+    
+    let result = (currentDate - adDate) / (1000 * 60) + timeDif;
+
     if (result < 60) {
         result = Math.floor(result);
         if (result === 1) result = result + " minute ago";
