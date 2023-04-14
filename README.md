@@ -10,7 +10,7 @@ The main aim for the site is to provide clear and readable interface with minima
 
 Note: the site displays max 48 results per API call because of <a href="#APILimit">API limitations</a>
 
-### Status: [DEPLOYED on *GitHub Pages*](https://pwodyk.github.io/CI_MilestoneProject2/)
+### Status: [DEPLOYED on *GitHub Pages*](https://pawodyk.github.io/CI_MilestoneProject2/)
 
 <hr>
 
